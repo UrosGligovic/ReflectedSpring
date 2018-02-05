@@ -22,11 +22,11 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import com.ugligovic.reflectedspring.annotations.InjectableParameter;
 import com.ugligovic.reflectedspring.classprovider.ApiClassesProvider;
-import com.ugligovic.reflectedspring.dummy.DummyOutput;
 import com.ugligovic.reflectedspring.exceptions.BadRequest;
 import com.ugligovic.reflectedspring.exceptions.InternalServerError;
 import com.ugligovic.reflectedspring.exceptions.MethodNotAllowed;
 import com.ugligovic.reflectedspring.exceptions.NotFound;
+import com.ugligovic.reflectedspring.injectablelogic.InjectableLogicHolder;
 import com.ugligovic.reflectedspring.util.Constants;
 
 
@@ -39,7 +39,6 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
     private static final Logger logger = Logger.getLogger(ReflectionLogic.class);
 
-    DummyOutput eventHandler = new DummyOutput();
 
     public void processRequest(String clazz, String method, Map<String, String> requestMap) throws IOException {
 
@@ -128,7 +127,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
                 } else if (annotation instanceof InjectableParameter) {
                     logger.info("type InjectableParameter");
-                    listOfArgs.add(eventHandler);
+                    listOfArgs.add(InjectableLogicHolder.getInjectableLogic());
                 }
             }
         }
