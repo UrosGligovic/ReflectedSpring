@@ -5,10 +5,14 @@
  */
 package com.ugligovic.reflectedspring.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  *
  * @author ugligovic
  */
+@ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE, reason = "Service Unavailable")
 public class ServiceUnavailable  extends RuntimeException{
     
      

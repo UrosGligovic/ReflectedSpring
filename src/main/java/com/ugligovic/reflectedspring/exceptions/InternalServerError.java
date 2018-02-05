@@ -5,10 +5,14 @@
  */
 package com.ugligovic.reflectedspring.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  *
  * @author ugligovic
  */
+@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Internal Server Error")
 public class InternalServerError  extends RuntimeException{
     
      
