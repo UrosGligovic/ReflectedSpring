@@ -40,7 +40,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
     private static final Logger logger = Logger.getLogger(ReflectionLogic.class);
 
 
-    public void processRequest(String clazz, String method, Map<String, String> requestMap) throws IOException {
+    public Object processRequest(String clazz, String method, Map<String, String> requestMap) throws IOException {
 
         Class neededClass = ApiClassesProvider.getClassProvider().getClassMap().get(clazz);
 
@@ -58,7 +58,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
         List<Object> listOfArgs = prepareParameters(neededMethod, requestMap);
 
-        invokeTheMethod(neededMethod, listOfArgs, neededClass);
+       return invokeTheMethod(neededMethod, listOfArgs, neededClass);
 
     }
 
@@ -82,10 +82,10 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
     }
 
-    private void invokeTheMethod(Method neededMethod, List<Object> listOfArgs, Class neededClass) {
+    private Object invokeTheMethod(Method neededMethod, List<Object> listOfArgs, Class neededClass) {
         try {
 
-            neededMethod.invoke(null, listOfArgs.toArray());
+           return neededMethod.invoke(null, listOfArgs.toArray());
 
         } catch (IllegalAccessException ex) {
             ex.printStackTrace();

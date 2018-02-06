@@ -39,9 +39,9 @@ public class ReflectionRestController {
 
         try {
             logger.info(requestMap);
-            reflectionLogic.processRequest(clazz, method, requestMap);
+            Object response= reflectionLogic.processRequest(clazz, method, requestMap);
             logger.info("Successful execution of method " + method + " from class " + clazz + " with parameters" + requestMap);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Success", 200));
+            return ResponseEntity.status(HttpStatus.OK).body(response);
 
         } catch (IOException ex) {
             logger.error(ex.getMessage());
