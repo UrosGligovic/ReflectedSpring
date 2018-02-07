@@ -5,9 +5,6 @@
  */
 package com.ugligovic.reflectedspring.classprovider;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author Uros Gligovic

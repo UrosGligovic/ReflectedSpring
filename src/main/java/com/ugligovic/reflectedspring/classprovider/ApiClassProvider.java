@@ -5,7 +5,6 @@
  */
 package com.ugligovic.reflectedspring.classprovider;
 
-import com.ugligovic.reflectedspring.classprovider.ApiClassProviderInterface;
 import java.util.HashMap;
 import java.util.Map;
 

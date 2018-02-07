@@ -7,9 +7,7 @@ package com.ugligovic.reflectedspring;
 
 import com.ugligovic.reflectedspring.model.Response;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
