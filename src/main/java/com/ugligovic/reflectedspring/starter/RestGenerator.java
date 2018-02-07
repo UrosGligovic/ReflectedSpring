@@ -35,5 +35,24 @@ public class RestGenerator {
         Main.main(argsi);
 
     }
+     
+      public static void restRunWithInjectableLogicWithCustomPort(ApiClassProviderInterface apiClassProvider, Object injectableLogic,String port) {
+
+        InjectableLogicHolder.setInjectableLogic(injectableLogic);
+        ApiClassesProvider.setClassProvider(apiClassProvider);
+
+        String[] argsi = {port};
+        Main.main(argsi);
+
+    }
+      
+      public static void restRunWithCustomPort(ApiClassProviderInterface apiClassProvider, String port) {
+
+        ApiClassesProvider.setClassProvider(apiClassProvider);
+
+        String[] argsi = {port};
+        Main.main(argsi);
+
+    }
 
 }
