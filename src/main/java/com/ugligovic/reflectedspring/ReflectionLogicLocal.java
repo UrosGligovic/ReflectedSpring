@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 public interface ReflectionLogicLocal {
     

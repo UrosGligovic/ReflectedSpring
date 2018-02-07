@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Bad Request")
 public class BadRequest extends RuntimeException {

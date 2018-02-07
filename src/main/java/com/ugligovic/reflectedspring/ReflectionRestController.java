@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 @RestController
 @RequestMapping("/Api")

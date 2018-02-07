@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Not Found")
 public class NotFound extends RuntimeException{

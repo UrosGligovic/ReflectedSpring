@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE, reason = "Service Unavailable")
 public class ServiceUnavailable  extends RuntimeException{

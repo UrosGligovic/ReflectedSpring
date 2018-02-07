@@ -32,7 +32,7 @@ import com.ugligovic.reflectedspring.util.Constants;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 @Service
 public class ReflectionLogic implements ReflectionLogicLocal {

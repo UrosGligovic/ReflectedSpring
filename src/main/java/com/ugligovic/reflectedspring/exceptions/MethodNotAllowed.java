@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED, reason = "Method Not Allowed")
 public class MethodNotAllowed extends RuntimeException {

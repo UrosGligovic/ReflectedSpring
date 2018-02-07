@@ -7,7 +7,7 @@ package com.ugligovic.reflectedspring.model;
 
 /**
  *
- * @author ugligovic
+ * @author Uros Gligovic
  */
 public class Response {
     
