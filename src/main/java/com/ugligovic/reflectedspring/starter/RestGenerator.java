@@ -21,7 +21,7 @@ public class RestGenerator {
 
         ApiClassesProvider.setClassProvider(apiClassProvider);
 
-        String[] argsi = {"1"};
+        String[] argsi = {};
         Main.main(argsi);
 
     }
@@ -31,7 +31,7 @@ public class RestGenerator {
         InjectableLogicHolder.setInjectableLogic(injectableLogic);
         ApiClassesProvider.setClassProvider(apiClassProvider);
 
-        String[] argsi = {"1"};
+        String[] argsi = {};
         Main.main(argsi);
 
     }
