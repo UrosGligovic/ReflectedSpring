@@ -18,7 +18,7 @@ public class InjectableLogicHolder {
     }
 
     public static void setInjectableLogic(Object injectableLogic) {
-        injectableLogic = injectableLogic;
+        InjectableLogicHolder.injectableLogic = injectableLogic;
     }
 
 }

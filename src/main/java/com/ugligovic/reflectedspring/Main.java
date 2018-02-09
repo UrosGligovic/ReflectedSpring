@@ -14,14 +14,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class Main {
-    
+
     public static void main(String[] args) {
-        
-        if(args.length>0){
-            System.getProperties().put( "server.port", args[0] );
+
+        if (args.length > 0) {
+            System.getProperties().put("server.port", args[0]);
         }
-        
+
         SpringApplication.run(Main.class, args);
     }
-    
+
 }
