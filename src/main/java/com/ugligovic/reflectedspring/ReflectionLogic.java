@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import com.ugligovic.reflectedspring.annotations.InjectableParameter;
 import com.ugligovic.reflectedspring.classprovider.ApiClassesProvider;
 import com.ugligovic.reflectedspring.exceptions.BadRequest;
 import com.ugligovic.reflectedspring.exceptions.InternalServerError;
@@ -28,6 +27,7 @@ import com.ugligovic.reflectedspring.exceptions.MethodNotAllowed;
 import com.ugligovic.reflectedspring.exceptions.NotFound;
 import com.ugligovic.reflectedspring.injectablelogic.InjectableLogicHolder;
 import com.ugligovic.reflectedspring.util.Constants;
+import com.ugligovic.reflectedspring.annotations.InjectableLogic;
 
 
 /**
@@ -89,15 +89,15 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
         } catch (IllegalAccessException ex) {
             ex.printStackTrace();
-            logger.error("Unsuccessful1 execution of method " + neededMethod + " from class " + neededClass + " " + ex);
+            logger.error("Unsuccessful 1 execution of method " + neededMethod + " from class " + neededClass + " " + ex);
             throw new MethodNotAllowed("Unsuccessful 1 execution of method " + neededMethod + " from class " + neededClass);
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
-            logger.error("Unsuccessful2 execution of method " + neededMethod + " from class " + neededClass + " " + ex);
+            logger.error("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass + " " + ex);
             throw new BadRequest("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass);
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();          
-            logger.error("Unsuccessful3 execution of method " + neededMethod + " from class " + neededClass + ex.getCause());
+            logger.error("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass + ex.getCause());
             throw new InternalServerError("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass + " cause: " + ex.getCause());
         }
     }
@@ -125,8 +125,8 @@ public class ReflectionLogic implements ReflectionLogicLocal {
                         throw new BadRequest("Problem with parsing parameter " + paramDesc.name());
                     }
 
-                } else if (annotation instanceof InjectableParameter) {
-                    logger.info("type InjectableParameter");
+                } else if (annotation instanceof InjectableLogic) {
+                    logger.info("type InjectableLogic");
                     listOfArgs.add(InjectableLogicHolder.getInjectableLogic());
                 }
             }
