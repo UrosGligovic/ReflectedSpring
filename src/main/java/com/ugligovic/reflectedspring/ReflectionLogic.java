@@ -89,15 +89,15 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
         } catch (IllegalAccessException ex) {
             ex.printStackTrace();
-            logger.error("Unsuccessful 1 execution of method " + neededMethod + " from class " + neededClass + " " + ex);
+            logger.error("Unsuccessful 1 execution of method " + neededMethod + " from class " + neededClass, ex);
             throw new MethodNotAllowed("Unsuccessful 1 execution of method " + neededMethod + " from class " + neededClass);
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
-            logger.error("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass + " " + ex);
+            logger.error("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass , ex);
             throw new BadRequest("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass);
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();          
-            logger.error("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass + ex.getCause());
+            logger.error("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass , ex.getCause());
             throw new InternalServerError("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass + " cause: " + ex.getCause());
         }
     }
@@ -121,7 +121,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
                     try {
                         listOfArgs.add(typeConverter(methodParameterTypes[i], requestMap.get(paramDesc.name())));
                     } catch (ParseException ex) {
-                        logger.error("Problem with parsing parameter " + ex);
+                        logger.error("Problem with parsing parameter ", ex);
                         throw new BadRequest("Problem with parsing parameter " + paramDesc.name());
                     }
 
