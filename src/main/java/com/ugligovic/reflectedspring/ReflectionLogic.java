@@ -97,7 +97,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
             throw new BadRequest("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass);
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();          
-            logger.error("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass , ex.getCause());
+            logger.error("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass , ex);
             throw new InternalServerError("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass + " cause: " + ex.getCause());
         }
     }
