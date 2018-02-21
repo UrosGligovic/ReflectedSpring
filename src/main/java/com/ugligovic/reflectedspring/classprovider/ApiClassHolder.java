@@ -12,16 +12,16 @@ import java.util.Map;
  *
  * @author Uros Gligovic
  */
-public class ApiClassProvider implements ApiClassProviderInterface {
+public class ApiClassHolder {
 
-    private  Map<String, Class> apiMap = new HashMap<>();
+    private static Map<String, Class> apiMap = new HashMap<>();
 
-    @Override
-    public Map<String, Class> getClassMap() {
-        return apiMap;
+    
+    public static Map<String, Class> getClassMap() {
+        return ApiClassHolder.apiMap;
     }
     
-    public void mapNameToClass(String name, Class clazz){
+    public static void mapNameToClass(String name, Class clazz){
         apiMap.put(name, clazz);
     }
 

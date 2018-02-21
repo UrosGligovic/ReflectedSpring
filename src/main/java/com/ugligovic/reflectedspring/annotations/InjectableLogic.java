@@ -18,5 +18,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 public @interface InjectableLogic {
 
+     public String type() default "";
 
 }

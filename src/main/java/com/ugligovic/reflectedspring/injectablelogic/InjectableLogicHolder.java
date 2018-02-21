@@ -5,20 +5,23 @@
  */
 package com.ugligovic.reflectedspring.injectablelogic;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Uros Gligovic
  */
 public class InjectableLogicHolder {
 
-    private static Object injectableLogic;
+    private static Map<String,Object> injectableLogicMap = new HashMap<>();
 
-    public static Object getInjectableLogic() {
-        return injectableLogic;
+    public static Map<String,Object> getInjectableLogicMap() {
+        return InjectableLogicHolder.injectableLogicMap;
     }
 
-    public static void setInjectableLogic(Object injectableLogic) {
-        InjectableLogicHolder.injectableLogic = injectableLogic;
+    public static void mapTypeToInjectableLogic(String type,Object injectableLogic) {
+        InjectableLogicHolder.injectableLogicMap.put(type, injectableLogic);
     }
 
 }

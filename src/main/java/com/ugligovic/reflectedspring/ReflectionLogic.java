@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import com.ugligovic.reflectedspring.classprovider.ApiClassesProvider;
 import com.ugligovic.reflectedspring.exceptions.BadRequest;
 import com.ugligovic.reflectedspring.exceptions.InternalServerError;
 import com.ugligovic.reflectedspring.exceptions.MethodNotAllowed;
@@ -28,7 +27,7 @@ import com.ugligovic.reflectedspring.exceptions.NotFound;
 import com.ugligovic.reflectedspring.injectablelogic.InjectableLogicHolder;
 import com.ugligovic.reflectedspring.util.Constants;
 import com.ugligovic.reflectedspring.annotations.InjectableLogic;
-
+import com.ugligovic.reflectedspring.classprovider.ApiClassHolder;
 
 /**
  *
@@ -39,10 +38,9 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
     private static final Logger logger = Logger.getLogger(ReflectionLogic.class);
 
-
     public Object processRequest(String clazz, String method, Map<String, String> requestMap) throws IOException {
 
-        Class neededClass = ApiClassesProvider.getClassProvider().getClassMap().get(clazz);
+        Class neededClass = ApiClassHolder.getClassMap().get(clazz);
 
         if (neededClass == null) {
             logger.error("Unexisting class " + clazz);
@@ -58,13 +56,13 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
         List<Object> listOfArgs = prepareParameters(neededMethod, requestMap);
 
-       return invokeTheMethod(neededMethod, listOfArgs, neededClass);
+        return invokeTheMethod(neededMethod, listOfArgs, neededClass);
 
     }
 
     public String getRequestExample(String clazz, String method) throws IOException {
 
-        Class neededClass = ApiClassesProvider.getClassProvider().getClassMap().get(clazz);
+        Class neededClass = ApiClassHolder.getClassMap().get(clazz);
 
         if (neededClass == null) {
             logger.error("Unexisting class " + clazz);
@@ -85,7 +83,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
     private Object invokeTheMethod(Method neededMethod, List<Object> listOfArgs, Class neededClass) {
         try {
 
-           return neededMethod.invoke(null, listOfArgs.toArray());
+            return neededMethod.invoke(null, listOfArgs.toArray());
 
         } catch (IllegalAccessException ex) {
             ex.printStackTrace();
@@ -93,11 +91,11 @@ public class ReflectionLogic implements ReflectionLogicLocal {
             throw new MethodNotAllowed("Unsuccessful 1 execution of method " + neededMethod + " from class " + neededClass);
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
-            logger.error("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass , ex);
+            logger.error("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass, ex);
             throw new BadRequest("Unsuccessful 2 execution of method " + neededMethod + " from class " + neededClass);
         } catch (InvocationTargetException ex) {
-            ex.printStackTrace();          
-            logger.error("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass , ex);
+            ex.printStackTrace();
+            logger.error("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass, ex);
             throw new InternalServerError("Unsuccessful 3 execution of method " + neededMethod + " from class " + neededClass + " cause: " + ex.getCause());
         }
     }
@@ -127,7 +125,8 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
                 } else if (annotation instanceof InjectableLogic) {
                     logger.info("type InjectableLogic");
-                    listOfArgs.add(InjectableLogicHolder.getInjectableLogic());
+                    InjectableLogic paramDesc = (InjectableLogic) annotation;
+                    listOfArgs.add(InjectableLogicHolder.getInjectableLogicMap().get(paramDesc.type()));
                 }
             }
         }
