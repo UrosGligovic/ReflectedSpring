@@ -127,8 +127,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
                 }
 
             } else {
-                
-                logger.info(parameters[i].getType());
+
                 try {
                     listOfArgs.add(typeConverter(parameters[i].getType(), requestMap.get(parameters[i].getName())));
                 } catch (ParseException ex) {
