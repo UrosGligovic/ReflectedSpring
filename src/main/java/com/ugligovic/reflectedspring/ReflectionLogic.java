@@ -28,6 +28,7 @@ import com.ugligovic.reflectedspring.injectablelogic.InjectableLogicHolder;
 import com.ugligovic.reflectedspring.util.Constants;
 import com.ugligovic.reflectedspring.annotations.InjectableLogic;
 import com.ugligovic.reflectedspring.classprovider.ApiClassHolder;
+import java.lang.reflect.Parameter;
 
 /**
  *
@@ -103,33 +104,40 @@ public class ReflectionLogic implements ReflectionLogicLocal {
     private List<Object> prepareParameters(Method neededMethod, Map<String, String> requestMap) {
 
         Class[] methodParameterTypes = neededMethod.getParameterTypes();
-        Annotation[][] methodParameterAnotations = neededMethod.getParameterAnnotations();
-
         // Map<String, String> requestHelpMap = new HashMap<>();
         List<Object> listOfArgs = new ArrayList();
+        Parameter[] parameters = neededMethod.getParameters();
 
-        for (int i = 0; i < methodParameterTypes.length; i++) {
+        for (int i = 0; i < parameters.length; i++) {
 
-            for (Annotation annotation : methodParameterAnotations[i]) {
+            if (parameters[i].isAnnotationPresent(InjectableLogic.class)) {
+                logger.info("type InjectableLogic");
+                InjectableLogic paramDesc = parameters[i].getAnnotationsByType(InjectableLogic.class)[0];
+                listOfArgs.add(InjectableLogicHolder.getInjectableLogicMap().get(paramDesc.type()));
+                
+            } else if (parameters[i].isAnnotationPresent(ParameterDesc.class)) {
 
-                if (annotation instanceof ParameterDesc) {
+                ParameterDesc paramDesc = parameters[i].getAnnotationsByType(ParameterDesc.class)[0];
 
-                    ParameterDesc paramDesc = (ParameterDesc) annotation;
+                try {
+                    listOfArgs.add(typeConverter(parameters[i].getType(), requestMap.get(paramDesc.name())));
+                } catch (ParseException ex) {
+                    logger.error("Problem with parsing parameter ", ex);
+                    throw new BadRequest("Problem with parsing parameter " + paramDesc.name());
+                }
 
-                    try {
-                        listOfArgs.add(typeConverter(methodParameterTypes[i], requestMap.get(paramDesc.name())));
-                    } catch (ParseException ex) {
-                        logger.error("Problem with parsing parameter ", ex);
-                        throw new BadRequest("Problem with parsing parameter " + paramDesc.name());
-                    }
-
-                } else if (annotation instanceof InjectableLogic) {
-                    logger.info("type InjectableLogic");
-                    InjectableLogic paramDesc = (InjectableLogic) annotation;
-                    listOfArgs.add(InjectableLogicHolder.getInjectableLogicMap().get(paramDesc.type()));
+            } else {
+                
+                logger.info(parameters[i].getType());
+                try {
+                    listOfArgs.add(typeConverter(parameters[i].getType(), requestMap.get(parameters[i].getName())));
+                } catch (ParseException ex) {
+                    logger.error("Problem with parsing parameter ", ex);
+                    throw new BadRequest("Problem with parsing parameter " + parameters[i].getName());
                 }
             }
         }
+
         return listOfArgs;
     }
 
