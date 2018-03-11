@@ -14,6 +14,6 @@ import java.util.Map;
  */
 public interface ReflectionLogicLocal {
     
-    public Object processRequest(String clazz, String method, Map<String,String> requestMap) throws IOException;
+    public Object processRequest(String clazz, String method, String requestMap) throws IOException;
     
 }

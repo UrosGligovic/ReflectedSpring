@@ -5,6 +5,7 @@
  */
 package com.ugligovic.reflectedspring;
 
+import com.google.gson.Gson;
 import com.ugligovic.reflectedspring.model.Response;
 import java.io.IOException;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class ReflectionRestController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/{class}/{method}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    ResponseEntity executePost(@PathVariable("class") String clazz, @PathVariable("method") String method, @RequestBody Map<String, String> requestMap) {
+    ResponseEntity executePost(@PathVariable("class") String clazz, @PathVariable("method") String method, @RequestBody String requestMap) {
 
         try {
             logger.info(requestMap);
@@ -58,7 +59,7 @@ public class ReflectionRestController {
 
         try {
             logger.info(request);
-            Object response= reflectionLogic.processRequest(clazz, method, request);
+            Object response= reflectionLogic.processRequest(clazz, method, new Gson().toJson(request));
             logger.info("Successful execution of method " + method + " from class " + clazz + " with parameters" + request);
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
