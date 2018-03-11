@@ -106,13 +106,13 @@ public class ReflectionLogic implements ReflectionLogicLocal {
         // Map<String, String> requestHelpMap = new HashMap<>();
         List<Object> listOfArgs = new ArrayList();
         Map<String, String> requestMap = new HashMap<>();
-        boolean hasRequestObjectAnnotation = false;
+        boolean hasSingleRequestObjectAnnotation = false;
 
         Class[] methodParameterTypes = neededMethod.getParameterTypes();
         Parameter[] parameters = neededMethod.getParameters();
-        hasRequestObjectAnnotation = checkForSingleRequestObjectAnnotation(parameters, hasRequestObjectAnnotation);
+        hasSingleRequestObjectAnnotation = checkForSingleRequestObjectAnnotation(parameters, hasSingleRequestObjectAnnotation);
 
-        if (!hasRequestObjectAnnotation) {
+        if (!hasSingleRequestObjectAnnotation) {
             requestMap = new Gson().fromJson(request, HashMap.class);
         }
 
@@ -128,7 +128,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
                 InjectableLogic paramDesc = parameters[i].getAnnotationsByType(InjectableLogic.class)[0];
                 listOfArgs.add(InjectableLogicHolder.getInjectableLogicMap().get(paramDesc.type()));
 
-            } else if (parameters[i].isAnnotationPresent(ParameterDesc.class) && !hasRequestObjectAnnotation) {
+            } else if (parameters[i].isAnnotationPresent(ParameterDesc.class) && !hasSingleRequestObjectAnnotation) {
 
                 ParameterDesc paramDesc = parameters[i].getAnnotationsByType(ParameterDesc.class)[0];
 
@@ -139,7 +139,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
                     throw new BadRequest("Problem with parsing parameter " + paramDesc.name());
                 }
 
-            } else if (!hasRequestObjectAnnotation) {
+            } else if (!hasSingleRequestObjectAnnotation) {
 
                 try {
                     listOfArgs.add(typeConverter(parameters[i].getType(), requestMap.get(parameters[i].getName())));
