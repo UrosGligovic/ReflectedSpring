@@ -29,6 +29,7 @@ import com.ugligovic.reflectedspring.util.Constants;
 import com.ugligovic.reflectedspring.annotations.InjectableLogic;
 import com.ugligovic.reflectedspring.classprovider.ApiClassHolder;
 import java.lang.reflect.Parameter;
+import com.ugligovic.reflectedspring.annotations.SingleRequestObject;
 
 /**
  *
@@ -55,8 +56,8 @@ public class ReflectionLogic implements ReflectionLogicLocal {
             throw new NotFound("Unexisting method " + method + " from class " + clazz);
         }
 
-            List<Object> listOfArgs = prepareParameters(neededMethod, request);
-            return invokeTheMethod(neededMethod, listOfArgs, neededClass);
+        List<Object> listOfArgs = prepareParameters(neededMethod, request);
+        return invokeTheMethod(neededMethod, listOfArgs, neededClass);
 
     }
 
@@ -104,26 +105,30 @@ public class ReflectionLogic implements ReflectionLogicLocal {
 
         // Map<String, String> requestHelpMap = new HashMap<>();
         List<Object> listOfArgs = new ArrayList();
-        Map<String, String> requestMap;
-        if (neededMethod.getParameterCount() == 1) {
-            Object requestObject = new Gson().fromJson(request, neededMethod.getParameterTypes()[0]);
-            listOfArgs.add(requestObject);
-            return listOfArgs;
-        } else {
-            requestMap = new Gson().fromJson(request, HashMap.class);
-        }
+        Map<String, String> requestMap = new HashMap<>();
+        boolean hasRequestObjectAnnotation = false;
 
         Class[] methodParameterTypes = neededMethod.getParameterTypes();
         Parameter[] parameters = neededMethod.getParameters();
+        hasRequestObjectAnnotation = checkForSingleRequestObjectAnnotation(parameters, hasRequestObjectAnnotation);
+
+        if (!hasRequestObjectAnnotation) {
+            requestMap = new Gson().fromJson(request, HashMap.class);
+        }
 
         for (int i = 0; i < parameters.length; i++) {
 
-            if (parameters[i].isAnnotationPresent(InjectableLogic.class)) {
+            if (parameters[i].isAnnotationPresent(SingleRequestObject.class)) {
+                logger.info("type RequestObject");
+                Object requestObject = new Gson().fromJson(request, neededMethod.getParameterTypes()[0]);
+                listOfArgs.add(requestObject);
+
+            } else if (parameters[i].isAnnotationPresent(InjectableLogic.class)) {
                 logger.info("type InjectableLogic");
                 InjectableLogic paramDesc = parameters[i].getAnnotationsByType(InjectableLogic.class)[0];
                 listOfArgs.add(InjectableLogicHolder.getInjectableLogicMap().get(paramDesc.type()));
 
-            } else if (parameters[i].isAnnotationPresent(ParameterDesc.class)) {
+            } else if (parameters[i].isAnnotationPresent(ParameterDesc.class) && !hasRequestObjectAnnotation) {
 
                 ParameterDesc paramDesc = parameters[i].getAnnotationsByType(ParameterDesc.class)[0];
 
@@ -134,7 +139,7 @@ public class ReflectionLogic implements ReflectionLogicLocal {
                     throw new BadRequest("Problem with parsing parameter " + paramDesc.name());
                 }
 
-            } else {
+            } else if (!hasRequestObjectAnnotation) {
 
                 try {
                     listOfArgs.add(typeConverter(parameters[i].getType(), requestMap.get(parameters[i].getName())));
@@ -146,6 +151,15 @@ public class ReflectionLogic implements ReflectionLogicLocal {
         }
 
         return listOfArgs;
+    }
+
+    private boolean checkForSingleRequestObjectAnnotation(Parameter[] parameters, boolean hasRequestObjectAnnotation) {
+        for (int i = 0; i < parameters.length; i++) {
+            if (parameters[i].isAnnotationPresent(SingleRequestObject.class)) {
+                hasRequestObjectAnnotation = true;
+            }
+        }
+        return hasRequestObjectAnnotation;
     }
 
     private List<Object> prepareExampleParameters(Method neededMethod) {
